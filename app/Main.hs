@@ -12,10 +12,35 @@ data Customer = Customer {
 data AccountNumber = One | Two | Three | Four | Five | Six | Seven | Eight | Nine | Ten  deriving (Show, Eq)
 type AccountBalance =  Int
 type Name = String
-type Winner = String
 
--- copy the dice app and each loop (x10)
--- have a customer thread select another customer and transfer money
+
+
+
+randomAccountSelectors :: IO (AccountNumber, AccountNumber)
+randomAccountSelectors = do
+    n <- randomIO :: IO Int
+    let random = mapIntToAccount n
+    m <- randomIO :: IO Int
+    let randomb = mapIntToAccount m
+    if random /= randomb then do
+    return (random, randomb)
+       else do randomAccountSelectors
+
+mapIntToAccount :: Int -> AccountNumber
+mapIntToAccount  n = case r of
+      0 -> One
+      1 -> Two
+      2 -> Three
+      3 -> Four
+      4 -> Five
+      5 -> Six
+      6 -> Seven
+      7 -> Eight
+      8 -> Nine
+      9 -> Ten 
+    where r = mod n 10
+
+
 
 main :: IO ()
 main = do
@@ -51,11 +76,20 @@ main = do
   d <- takeMVar c
   print b
   print d
+  -- test transfer
+  (b, d) <- transfer b d 10
+  print b
+  print d
 
+-- EACH THREAD SELECT A RANDOM CUSTOMER
+-- copy the dice app and each loop (x10)
+-- have a customer thread select another customer and transfer money
 
-  -- EACH THREAD SELECT A RANDOM CUSTOMER
-
-  
+transfer :: Customer -> Customer -> Int -> IO (Customer, Customer)
+transfer from to amount
+  | amount <= 0 = return (from, to)
+  | accountBalance from < amount = return (from, to)
+  | otherwise = return ((from { accountBalance =  ((accountBalance from) - amount)}),(to { accountBalance =  ((accountBalance to) + amount)}))
 
 
 
