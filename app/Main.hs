@@ -15,7 +15,6 @@ type Name = String
 
 
 
-
 randomAccountSelectors :: IO (AccountNumber, AccountNumber)
 randomAccountSelectors = do
     n <- randomIO :: IO Int
@@ -25,6 +24,7 @@ randomAccountSelectors = do
     if random == randomb then do
      randomAccountSelectors 
        else do return (random, randomb)
+       
 
 mapIntToAccount :: Int -> AccountNumber
 mapIntToAccount  n = case r of
@@ -47,25 +47,25 @@ main = do
  --CREATE 10 VALUES OF TYPE CUSTOMER
 
  -- Create an account named C1 with a 20 balance
-  let c1 = Customer {name = "C1", accountBalance = 20, accountNumber = One}
+  let c1 = Customer {name = "C1", accountBalance = 2000, accountNumber = One}
  -- Create an account named C1 with a 20 balance
-  let c2 = Customer {name = "C2", accountBalance = 20, accountNumber = Two} 
+  let c2 = Customer {name = "C2", accountBalance = 1100, accountNumber = Two} 
  -- Create an account named C3 with a 0 balance
-  let c3 = Customer {name = "C3", accountBalance = 20, accountNumber = Three}
+  let c3 = Customer {name = "C3", accountBalance = 9000, accountNumber = Three}
 -- Create an account named C4 with a 0 balance
-  let c4 = Customer {name = "C4", accountBalance = 20, accountNumber = Four}
+  let c4 = Customer {name = "C4", accountBalance = 2500, accountNumber = Four}
 -- Create an account named C5 with a 0 balance
-  let c5 = Customer {name = "C5", accountBalance = 20, accountNumber = Five}
+  let c5 = Customer {name = "C5", accountBalance = 2020, accountNumber = Five}
 -- Create an account named C6 with a 0 balance
-  let c6 = Customer {name = "C6", accountBalance = 20, accountNumber = Six}
+  let c6 = Customer {name = "C6", accountBalance = 2090, accountNumber = Six}
 -- Create an account named C7 with a 0 balance
-  let c7 = Customer {name = "C3", accountBalance = 20, accountNumber = Seven}
+  let c7 = Customer {name = "C3", accountBalance = 7050, accountNumber = Seven}
 -- Create an account named C8 with a 0 balance
-  let c8 = Customer {name = "C8", accountBalance = 20, accountNumber = Eight}
+  let c8 = Customer {name = "C8", accountBalance = 5000, accountNumber = Eight}
 -- Create an account named C9 with a 0 balance
-  let c9 = Customer {name = "C9", accountBalance = 20, accountNumber = Nine}
+  let c9 = Customer {name = "C9", accountBalance = 6050, accountNumber = Nine}
 -- Create an account named C10 with a 0 balance
-  let c10 = Customer {name = "C10", accountBalance = 20, accountNumber = Ten}
+  let c10 = Customer {name = "C10", accountBalance = 8500, accountNumber = Ten}
 
 -- SPAWN A THREAD FOR EACH CUSTOMER
   a <- newEmptyMVar
@@ -77,10 +77,16 @@ main = do
   print b
   print d
   -- test transfer
+  --randomAccountSelectors <- transfer randomAccountSelectors 10
   (b, d) <- transfer b d 10
   print b
   print d
-
+  -- PICKS TWO RANDOM ACCOUNTS AND BINDS THEM (want to then somehow use these to make customer transfers)
+  x <- randomAccountSelectors
+  let payee = fst x
+  let recipient = snd x
+  -- %% x <- transferb payee recipient 5
+  putStrLn $ "done"
 -- EACH THREAD SELECT A RANDOM CUSTOMER
 -- copy the dice app and each loop (x10)
 -- have a customer thread select another customer and transfer money
@@ -92,8 +98,12 @@ transfer from to amount
   | otherwise = return ((from { accountBalance =  ((accountBalance from) - amount)}),(to { accountBalance =  ((accountBalance to) + amount)}))
 
 
-
-
+-- %% STUCK ON -- create a function to transfer from accounts -> customer
+{-transferb :: AccountNumber -> AccountNumber -> Int -> IO (Customer, Customer)
+transferb from to amount
+  | amount <= 0 = return (from, to)
+  | accountBalance from < amount = return (from, to)
+  | otherwise = return ((from { accountBalance =  ((accountBalance from) - amount)}),(to { accountBalance =  ((accountBalance to) + amount)})) -}
 
 
 
