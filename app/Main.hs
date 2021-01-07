@@ -22,9 +22,9 @@ randomAccountSelectors = do
     let random = mapIntToAccount n
     m <- randomIO :: IO Int
     let randomb = mapIntToAccount m
-    if random /= randomb then do
-    return (random, randomb)
-       else do randomAccountSelectors
+    if random == randomb then do
+     randomAccountSelectors 
+       else do return (random, randomb)
 
 mapIntToAccount :: Int -> AccountNumber
 mapIntToAccount  n = case r of
